@@ -23,3 +23,6 @@ https://felipervm.github.io/arcteryx-product-architecture/
 
 ## Disclaimer
 Independent portfolio study using public information. Not affiliated with Arc'teryx.
+
+## Customer evidence
+An exploratory register of 10 public discussions and its collection limitations are documented in [CUSTOMER_SIGNALS.md](CUSTOMER_SIGNALS.md). Structured records are available in [research/customer-signals.json](research/customer-signals.json).

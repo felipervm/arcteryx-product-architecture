@@ -42,7 +42,7 @@ Inferência: expectativas sobre serviço fazem parte do valor percebido. O estud
 
 ## Limites e continuação da pesquisa
 
-Esta revisão verifica as bases estratégicas e a linguagem de produto. Não é uma reconstrução integral do catálogo nem uma pesquisa representativa de consumidores. Para aprofundar o portfólio, o próximo estudo deve capturar um catálogo de um único mercado com data, SKU, versão, família, modificador, preço, materiais e fit; codificar uma amostra explícita de discussões com URLs e datas; e testar as hipóteses com dados internos. Esses resultados não foram inventados na landing page.
+Esta revisão verifica as bases estratégicas e a linguagem de produto. Não é uma reconstrução integral do catálogo nem uma pesquisa representativa de consumidores. Para aprofundar o portfólio, o próximo estudo deve capturar um catálogo de um único mercado com data, SKU, versão, família, modificador, preço, materiais e fit; ampliar a amostra exploratória de discussões com novas plataformas e critérios de seleção; e testar as hipóteses com dados internos. Esses resultados não foram inventados na landing page.
 
 ## Imagens
 
@@ -54,4 +54,10 @@ Foram usadas três fotografias oficiais já relevantes ao argumento; não foi ne
 
 ## Entrega e verificação
 
-Site estático em HTML, CSS e JavaScript, com imagens locais. Sem dependências de execução. Verificados: sintaxe JavaScript, integridade do diff, âncoras internas, menu, expansão do modelo de dados, imagens e layouts desktop e móvel. A tabela tem rolagem horizontal própria no celular. A publicação no GitHub Pages não foi realizada.
+Site estático em HTML, CSS e JavaScript, com imagens locais. Sem dependências de execução. Verificados: sintaxe JavaScript, integridade do diff, âncoras internas, menu, expansão do modelo de dados, imagens e layouts desktop e móvel. A tabela tem rolagem horizontal própria no celular. Os arquivos foram enviados ao repositório. A disponibilidade do GitHub Pages deve ser verificada separadamente.
+
+## Finalização: convergência de fontes
+
+Foram acrescentadas 10 discussões públicas com datas, temas, resumos e contrapontos. Consulte [CUSTOMER_SIGNALS.md](CUSTOMER_SIGNALS.md) para o protocolo e [registros estruturados](research/customer-signals.json). É uma seleção exploratória de uma única plataforma, não uma estimativa de prevalência. O argumento conecta crescimento, arquitetura e circunstâncias de uso; experiências de serviço distintas impedem uma conclusão generalizada de falha.
+
+A narrativa incorpora os 18 novos centros ReBIRD em 2025, totalizando 43, informados na carta do CEO. A expansão de infraestrutura é um fato; seu efeito em experiência e retenção continua sendo hipótese. O visual aprovado foi preservado. Foram acrescentados favicon e metadados Open Graph/Twitter com imagem própria de apresentação. A referência La Dolfina permanece apenas nesta documentação.
