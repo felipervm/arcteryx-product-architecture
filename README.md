@@ -17,7 +17,7 @@ The site uses an editorial layout with local photography assets, responsive styl
 Open `index.html` in a browser or serve the repository with any static HTTP server. No build step or runtime dependencies are required.
 
 ## Live site
-After GitHub Pages is enabled from the `main` branch root, the site will be available at:
+The site is available at:
 
 https://felipervm.github.io/arcteryx-product-architecture/
 
