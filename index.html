@@ -1,138 +1,15 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="description" content="Independent Arc'teryx product, customer and strategy study by Felipe Mattos."/>
-<title>Arc'teryx Product Architecture — Felipe Mattos</title>
-<style>
-:root{--ink:#151515;--paper:#f1f1ee;--white:#fff;--muted:#a9aaa4;--line:rgba(255,255,255,.22);--orange:#dd6b2c}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:#fff;font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}a{color:inherit}
-nav{position:fixed;z-index:40;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;mix-blend-mode:difference;font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase}
-nav .right{display:flex;gap:22px}.section{position:relative;min-height:100svh;overflow:hidden}.content{position:relative;z-index:3;min-height:100svh;padding:112px 5vw 42px;display:flex;flex-direction:column;justify-content:flex-end}
-.bg{position:absolute;inset:-4%;background:
-radial-gradient(circle at 72% 26%,rgba(255,255,255,.18),transparent 20%),
-linear-gradient(140deg,transparent 0 24%,rgba(255,255,255,.08) 24.2% 24.8%,transparent 25% 100%),
-linear-gradient(20deg,#545a57 0 18%,#2b302e 18% 35%,#8f938d 35% 44%,#252927 44% 58%,#0e100f 58% 100%);
-transform:scale(1.07)}
-.bg.b{background:
-radial-gradient(circle at 68% 18%,rgba(255,255,255,.16),transparent 16%),
-linear-gradient(150deg,transparent 0 20%,rgba(255,255,255,.08) 20.2% 20.8%,transparent 21% 100%),
-linear-gradient(24deg,#c9c5bc 0 15%,#6f736e 15% 30%,#303330 30% 45%,#161817 45% 100%)}
-.bg.c{background:
-radial-gradient(circle at 30% 24%,rgba(255,255,255,.12),transparent 18%),
-linear-gradient(200deg,transparent 0 24%,rgba(255,255,255,.07) 24.2% 24.7%,transparent 25% 100%),
-linear-gradient(160deg,#a8aaa4 0 16%,#5d625d 16% 30%,#222523 30% 52%,#0f1110 52% 100%)}
-.bg.d{background:
-radial-gradient(circle at 74% 20%,rgba(244,179,58,.2),transparent 13%),
-linear-gradient(145deg,transparent 0 29%,rgba(255,255,255,.09) 29.2% 29.9%,transparent 30% 100%),
-linear-gradient(25deg,#8b9089 0 17%,#535852 17% 34%,#222522 34% 51%,#0c0e0d 51% 100%)}
-.overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.8),rgba(0,0,0,.24) 58%,rgba(0,0,0,.1)),linear-gradient(180deg,transparent 55%,rgba(0,0,0,.62))}
-.kicker{font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#ddd;margin-bottom:15px}
-h1,h2{font-family:"Arial Narrow","Helvetica Neue Condensed",Arial,sans-serif;font-weight:300;text-transform:uppercase;letter-spacing:-.045em;margin:0}
-h1{font-size:clamp(82px,11vw,168px);line-height:.72;max-width:1200px}h2{font-size:clamp(60px,7.5vw,112px);line-height:.79;max-width:1080px}
-.lede{max-width:720px;font-size:15px;line-height:1.58;color:rgba(255,255,255,.86);margin:21px 0 0}.hero-bottom{margin-top:28px;padding-top:15px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end}.scroll{font-size:9px;text-transform:uppercase;letter-spacing:.12em}
-.evidence-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:36px;max-width:1120px}.card{background:rgba(18,18,18,.61);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);min-height:145px;padding:16px;display:flex;flex-direction:column;justify-content:space-between}.card .type{font-size:8px;letter-spacing:.13em;text-transform:uppercase;color:#babbb6}.card strong{font-size:17px;line-height:1.2;font-weight:500}.card small{font-size:9px;line-height:1.35;color:#a7a8a3}
-.synthesis{margin-top:18px;max-width:900px;padding:18px 20px;border-left:2px solid var(--orange);background:rgba(10,10,10,.42);backdrop-filter:blur(10px)}.synthesis small{display:block;font-size:8px;letter-spacing:.13em;text-transform:uppercase;color:#bbb;margin-bottom:7px}.synthesis b{font-size:23px;line-height:1.25;font-weight:500}
-.method{background:#f4f4f1;color:#171717;padding:110px 5vw}.method .kicker,.sources .kicker{color:#666}.method p{max-width:770px;color:#444;line-height:1.62;font-size:17px}.method-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #cfcfc9;margin-top:42px}.m{padding:18px 20px 8px 0;border-right:1px solid #cfcfc9}.m+.m{padding-left:20px}.m:last-child{border-right:0}.m span{font-size:9px;font-weight:700}.m b{display:block;margin:18px 0 9px;text-transform:uppercase;font-size:14px}.m p{font-size:12px;line-height:1.5;color:#666}
-.impact{background:#171717;padding:120px 5vw;display:grid;grid-template-columns:.8fr 1.2fr;gap:70px}.impact h2{font-size:clamp(58px,7vw,105px)}.impact-list{border-top:1px solid #3c3c3c}.impact-item{display:grid;grid-template-columns:42px 1fr 1.3fr;gap:18px;padding:20px 0;border-bottom:1px solid #3c3c3c}.impact-item span{font-size:9px;color:var(--orange)}.impact-item b{font-size:14px;text-transform:uppercase}.impact-item p{margin:0;font-size:13px;line-height:1.5;color:#aaa}
-.sources{background:#efefec;color:#171717;padding:110px 5vw}.source-list{margin-top:40px;border-top:1px solid #ccc}.source-row{display:grid;grid-template-columns:160px 1fr auto;gap:20px;padding:16px 0;border-bottom:1px solid #ccc;align-items:center}.source-row span{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#777}.source-row b{font-size:14px;font-weight:500}.source-row a{font-size:10px;text-transform:uppercase;letter-spacing:.08em}.note{font-size:10px;color:#777;max-width:780px;line-height:1.45;margin-top:18px}
-.cta{display:flex;gap:24px;margin-top:26px;flex-wrap:wrap}.cta a{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;text-underline-offset:4px}
-.index{position:fixed;z-index:30;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px}.index i{display:block;width:22px;height:1px;background:#fff;opacity:.28;transition:.25s}.index i.active{width:40px;opacity:1}
-@media(max-width:900px){.evidence-grid{grid-template-columns:1fr 1fr}.impact{grid-template-columns:1fr}.method-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:620px){nav .right,.index{display:none}h1{font-size:58px}h2{font-size:54px}.hero-bottom{grid-template-columns:1fr}.evidence-grid,.method-grid{grid-template-columns:1fr}.m{border-right:0;border-bottom:1px solid #cfcfc9;padding:16px 0}.m+.m{padding-left:0}.source-row{grid-template-columns:1fr}.impact-item{grid-template-columns:32px 1fr}.impact-item p{grid-column:2}}
-</style>
-</head>
-<body>
-<nav><div>Felipe Mattos / Arc'teryx Research Study</div><div class="right"><span>Cross-source analysis</span><span>2026</span></div></nav>
-<div class="index"><i class="active"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-
-<section class="section hero"><div class="bg"></div><div class="overlay"></div><div class="content">
-<div class="kicker">Arc'teryx / Product + Customer + Strategy Signals</div>
-<h1>What changes<br>when expertise<br>has to scale?</h1>
-<div class="hero-bottom"><p class="lede">I crossed Arc'teryx product data, company strategy, retail experience and public customer conversations to look for tensions that matter as the brand grows.</p><div class="scroll">Scroll through 3 insights ↓</div></div>
-</div></section>
-
-<section class="section"><div class="bg b"></div><div class="overlay"></div><div class="content">
-<div class="kicker">01 / Insight — Product expertise has to scale</div>
-<h2>Growth is bringing more people into a highly technical product system.</h2>
-<div class="evidence-grid">
-<div class="card"><div class="type">COMPANY STRATEGY</div><strong>Arc'teryx grew 30%+ in 2025.</strong><small>Women’s and Footwear were breakout growth stories.</small></div>
-<div class="card"><div class="type">DTC</div><strong>Amer Sports reached 49% DTC revenue.</strong><small>Direct customer experience matters more as the channel mix shifts.</small></div>
-<div class="card"><div class="type">CUSTOMER SIGNAL</div><strong>“Which jacket should I buy?”</strong><small>Recent customer discussions show decision friction around first purchases.</small></div>
-<div class="card"><div class="type">CUSTOMER SIGNAL</div><strong>“Beta AR or SV?”</strong><small>Fit, layering and use-case distinctions require technical knowledge.</small></div>
-</div>
-<div class="synthesis"><small>Cross-source interpretation</small><b>As Arc'teryx reaches a broader audience, the cost of product ambiguity increases.</b></div>
-</div></section>
-
-<section class="section"><div class="bg c"></div><div class="overlay"></div><div class="content">
-<div class="kicker">02 / Insight — Product language is coherent, but expertise-dependent</div>
-<h2>Beta is intuitive.<br>Cerium shows why one naming logic does not equal one price logic.</h2>
-<div class="evidence-grid">
-<div class="card"><div class="type">CATALOG</div><strong>Beta: C$520 → C$1,000</strong><small>Core → SL → AR → SV forms a clean premium progression.</small></div>
-<div class="card"><div class="type">CATALOG</div><strong>Cerium SL costs more than core.</strong><small>C$580 vs C$520 because ultralight construction itself is premium.</small></div>
-<div class="card"><div class="type">CUSTOMER SIGNAL</div><strong>Fit and suffixes are discussed together.</strong><small>Recent users compare not only protection, but sizing and layering behavior.</small></div>
-<div class="card"><div class="type">PRODUCT EXPERIENCE</div><strong>Fit guides alone cannot explain every trade-off.</strong><small>The decision often depends on intended use, layering and personal priorities.</small></div>
-</div>
-<div class="synthesis"><small>Cross-source interpretation</small><b>The system is technically coherent, but customers may need expertise to decode what “better” means for them.</b></div>
-</div></section>
-
-<section class="section"><div class="bg d"></div><div class="overlay"></div><div class="content">
-<div class="kicker">03 / Insight — Premium is expanding beyond performance</div>
-<h2>System 0 turns repairability into part of the product value proposition.</h2>
-<div class="evidence-grid">
-<div class="card"><div class="type">PRODUCT</div><strong>Sperro SV: C$1,500</strong><small>Arc'teryx's first System 0 hardshell.</small></div>
-<div class="card"><div class="type">DESIGN SYSTEM</div><strong>80+ unique repairs.</strong><small>Repairability is designed into the product from the beginning.</small></div>
-<div class="card"><div class="type">BRAND STRATEGY</div><strong>Circularity is framed as performance-compatible.</strong><small>System 0 is positioned as product innovation, not only sustainability.</small></div>
-<div class="card"><div class="type">CUSTOMER SIGNAL</div><strong>Repair experience can shape premium perception.</strong><small>Public complaints are anecdotal, but show why service consistency matters.</small></div>
-</div>
-<div class="synthesis"><small>Cross-source interpretation</small><b>If repairability becomes part of premium value, post-purchase service becomes part of the product experience.</b></div>
-</div></section>
-
-<section class="method">
-<div class="kicker">04 / How I built the study</div>
-<h2>I treated public data as signals — not as internal truth.</h2>
-<p>I combined official corporate updates, Arc'teryx product and System 0 pages, public pricing, and recent customer discussions. Customer posts are directional evidence only; they are useful for finding questions, not for estimating prevalence.</p>
-<div class="method-grid">
-<div class="m"><span>01</span><b>Official strategy</b><p>Growth priorities, DTC, Women’s, Footwear.</p></div>
-<div class="m"><span>02</span><b>Product system</b><p>Family, suffix, price and technical positioning.</p></div>
-<div class="m"><span>03</span><b>Customer signals</b><p>Recent purchase, sizing and repair discussions.</p></div>
-<div class="m"><span>04</span><b>Synthesis</b><p>Look for tensions supported by more than one source type.</p></div>
-</div></section>
-
-<section class="impact">
-<div><div class="kicker">05 / What I would do inside Arc'teryx</div><h2>Turn the public signals into testable internal questions.</h2></div>
-<div class="impact-list">
-<div class="impact-item"><span>01</span><b>Measure comparison friction</b><p>Repeated PDP visits, comparison events, site-search refinement and support contacts by family.</p></div>
-<div class="impact-item"><span>02</span><b>Segment by experience level</b><p>Compare new vs returning customers to see where expertise changes product selection behavior.</p></div>
-<div class="impact-item"><span>03</span><b>Connect fit to outcomes</b><p>Returns, exchanges, size-guide usage and conversion by product family and fit profile.</p></div>
-<div class="impact-item"><span>04</span><b>Measure post-purchase value</b><p>Repair turnaround, repeat contacts, CSAT/NPS, trade-in behavior and future purchase after service interactions.</p></div>
-</div></section>
-
-<section class="sources">
-<div class="kicker">06 / Research sources</div><h2>Every major insight is tied back to its evidence.</h2>
-<div class="source-list">
-<div class="source-row"><span>Amer Sports / 2025</span><b>Arc'teryx growth; Women’s and Footwear as growth stories.</b><a href="https://www.amersports.com/newsroom/ceo-letter-to-shareholders-2025/" target="_blank">Open ↗</a></div>
-<div class="source-row"><span>Amer Sports / Annual Report</span><b>DTC and broader group strategy.</b><a href="https://www.amersports.com/newsroom/amer-sports-publishes-annual-report-for-fiscal-year-2025/" target="_blank">Open ↗</a></div>
-<div class="source-row"><span>Arc'teryx / System 0</span><b>System 0 positions circularity across design, repair and end of life.</b><a href="https://blog.arcteryx.com/news/arcteryx-introduces-system-0-a-new-framework-for-the-future-of-product-design-and-circularity/" target="_blank">Open ↗</a></div>
-<div class="source-row"><span>Arc'teryx / ReBIRD</span><b>Repairability and circular design direction.</b><a href="https://arcteryx.com/ca/en/explore/system0/process/repairability" target="_blank">Open ↗</a></div>
-<div class="source-row"><span>Reddit / Customer Signal</span><b>First-time purchase and jacket-selection questions.</b><a href="https://www.reddit.com/r/arcteryx/" target="_blank">Open ↗</a></div>
-</div>
-<div class="note">Public customer posts are used as qualitative signals, not representative evidence of overall customer sentiment or issue prevalence.</div>
-</section>
-
-<section class="section final"><div class="bg"></div><div class="overlay"></div><div class="content">
-<div class="kicker">07 / Why I built this</div>
-<h2>This is the kind of problem I want to work on inside Arc'teryx.</h2>
-<p class="lede">My background is in data, ecommerce, product information and operational analysis. I built this study to show how I combine fragmented signals, challenge the first hypothesis, and turn public evidence into questions that can be validated with real internal data.</p>
-<div class="cta"><a href="https://www.linkedin.com/in/felipervm" target="_blank">LinkedIn ↗</a><a href="https://github.com/felipervm" target="_blank">GitHub ↗</a><a href="mailto:felipervm22@gmail.com">Contact ↗</a></div>
-</div></section>
-
-<script>
-const observed=[...document.querySelectorAll('.section,.method,.impact,.sources')],dots=[...document.querySelectorAll('.index i')];
-const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){const i=observed.indexOf(e.target);dots.forEach((d,j)=>d.classList.toggle('active',i===j))}}),{threshold:.5});
-observed.forEach(s=>io.observe(s));
-addEventListener('scroll',()=>document.querySelectorAll('.bg').forEach(el=>{const r=el.parentElement.getBoundingClientRect();el.style.transform='translate3d(0,'+((innerHeight-r.top)*0.035)+'px,0) scale(1.07)'}),{passive:true});
-</script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="An independent study of Arc’teryx product architecture, growth and circularity by Felipe Mattos. Public evidence translated into testable business questions."><title>Expertise at Scale / Felipe Mattos</title><link rel="stylesheet" href="style.css"></head>
+<body><a class="skip" href="#study">Skip to study</a>
+<header><a class="identity" href="#top" aria-label="Felipe Mattos, back to top">FM<span>FELIPE MATTOS<br>INDEPENDENT RESEARCH</span></a><button id="menu-toggle" aria-expanded="false" aria-controls="menu">MENU <span aria-hidden="true">☰</span></button></header>
+<nav id="menu" aria-label="Study navigation" hidden><a href="#study">The question</a><a href="#growth">01 / Growth</a><a href="#architecture">02 / Product architecture</a><a href="#circularity">03 / Circularity</a><a href="#validation">Validation plan</a><a href="#sources">Sources</a><a href="#contact">About Felipe</a></nav>
+<main><section class="hero" id="top"><img class="hero-image" src="assets/hero.jpg" alt="An athlete wearing an orange technical jacket in snow spray" fetchpriority="high"><div class="shade"></div><div class="hero-copy"><p class="eyebrow">A FIELD STUDY / ARC’TERYX</p><h1>Expertise<br><em>at scale.</em></h1><p class="hero-sub">What changes when a highly technical<br>product system reaches a broader audience?</p></div><div class="hero-foot"><span>PRODUCT × CUSTOMER × STRATEGY</span><a href="#study">EXPLORE THE STUDY <span aria-hidden="true">↓</span></a><span>OCTOBER 2026</span></div></section>
+<section class="intro paper" id="study"><p class="eyebrow">THE QUESTION / 5 MIN READ</p><h2>Technical by design.<br><em>Clear by experience?</em></h2><div class="intro-bottom"><span class="stamp">PUBLIC SIGNALS<br>↓<br>TESTABLE QUESTIONS</span><div><p class="large">Arc’teryx builds products for demanding conditions. My question is how the knowledge behind those products travels with the brand as it grows.</p><p>This study connects public strategy, product language and circular design. It asks where product information and analytics could help customers choose with confidence — and how I would test that inside the business.</p><a class="text-link" href="#validation">FROM OBSERVATION TO EXPERIMENT ↗</a></div></div><div class="chapter-links"><a href="#growth"><span>01</span>Growth & expertise ↗</a><a href="#architecture"><span>02</span>The product system ↗</a><a href="#circularity"><span>03</span>Value beyond purchase ↗</a></div></section>
+<section class="growth dark" id="growth"><div class="section-heading"><p class="eyebrow">01 / GROWTH & EXPERTISE</p><h2>A bigger audience.<br><em>A deeper responsibility.</em></h2></div><div class="stats"><div><strong>30%+</strong><p>Arc’teryx growth in 2025</p></div><div><strong>49%</strong><p>Amer Sports group revenue from DTC in 2025</p></div><div><strong>24</strong><p>Net new Arc’teryx stores in 2025</p></div></div><a class="source-inline" href="https://www.amersports.com/newsroom/ceo-letter-to-shareholders-2025/" target="_blank" rel="noopener">[01] AMER SPORTS / CEO LETTER, MARCH 2026 ↗</a><div class="reasoning"><div><p class="eyebrow">OBSERVED</p><p>Women’s and Footwear were highlighted as growth categories. More stores expand the places where customers can encounter the brand.</p></div><div><p class="eyebrow">MY HYPOTHESIS</p><p>Broader reach may increase the range of product knowledge customers bring. Technical education could become more valuable at the point of choice.</p></div><div><p class="eyebrow">WHAT WOULD CHALLENGE IT?</p><p>Growth could come from experienced customers. New customers may already choose confidently. Revenue growth alone does not establish confusion.</p></div></div><div class="question"><span>THE INTERNAL QUESTION</span><p>Where does experience level change the path to a confident purchase?</p></div></section>
+<section class="architecture paper" id="architecture"><div class="architecture-grid"><div class="product-image"><img src="assets/product.jpg" alt="A black technical shell beside a close view of its fabric" loading="lazy"><span>FORM / MATERIAL / FUNCTION</span></div><div class="architecture-copy"><p class="eyebrow">02 / PRODUCT ARCHITECTURE</p><h2>A name is<br><em>a system.</em></h2><p class="large">The family describes the purpose. The modifier describes the trade-off.</p><p>Beta signals versatility. Cerium signals lightweight down insulation. SL, AR and SV describe priorities within a family. They do not establish a universal price or quality ladder.</p><a class="source-inline" href="https://outlet.arcteryx.com/ca/en/help/arc-naming" target="_blank" rel="noopener">[02] OFFICIAL NAMING SCHEME ↗</a><div class="modifier-list"><div><b>SL</b><span>Superlight</span><p>Weight & packability</p></div><div><b>AR</b><span>All Round</span><p>Versatility</p></div><div><b>SV</b><span>Severe Weather</span><p>Durability & protection</p></div></div></div></div><div class="editorial-note"><span>THE OPPORTUNITY</span><p>Bring the trade-off closer to the decision.</p><div><p>Arc’teryx already publishes naming and layering guidance. I would test whether contextual guidance on a product page helps more than a separate explanation.</p><a class="source-inline" href="https://arcteryx.com/us/en/product-advice/arcteryx-jacket-names" target="_blank" rel="noopener">[03] EXISTING PRODUCT EDUCATION ↗</a></div></div><details><summary>Explore a proposed product information model <span>+</span></summary><div class="model"><p>A proposed structure for comparison and analytics. These are fields to validate against the catalog, rather than a completed catalog audit.</p><div class="table-wrap"><table><caption>Fields connecting product purpose to a customer decision</caption><thead><tr><th>Field</th><th>Customer question</th><th>Why it matters</th></tr></thead><tbody><tr><td>Family & intended activity</td><td>What is it built for?</td><td>Compare products with similar purposes.</td></tr><tr><td>Modifier & construction</td><td>What am I trading off?</td><td>Explain weight, durability and protection.</td></tr><tr><td>Fit & layering role</td><td>How does it fit my system?</td><td>Connect selection to fit outcomes.</td></tr><tr><td>Model / season / region</td><td>Am I comparing equivalent versions?</td><td>Prevent mixing specifications or currencies.</td></tr><tr><td>Care & repair eligibility</td><td>What happens after purchase?</td><td>Make service expectations explicit.</td></tr></tbody></table></div></div></details></section>
+<section class="visual-break"><img src="assets/alpine.jpg" loading="lazy" alt="An alpine athlete testing a Sperro SV jacket on rocky mountain terrain"><div class="shade"></div><p>Built for the mountain.<br><em>Understood by the customer.</em></p><span>ARC’TERYX CAMPAIGN PHOTOGRAPHY / SPERRO SV</span></section>
+<section class="circularity dark" id="circularity"><p class="eyebrow">03 / VALUE BEYOND PURCHASE</p><div class="two-col"><h2>The product<br>doesn’t end<br><em>at checkout.</em></h2><div><p class="large">System 0 brings circular thinking into product design. The customer experience has to carry that promise forward.</p><p>The Sperro SV launch describes durability, repairability and end-of-life recovery. ReBIRD provides the service ecosystem behind that direction.</p><a class="source-inline" href="https://blog.arcteryx.com/news/arcteryx-introduces-system-0-a-new-framework-for-the-future-of-product-design-and-circularity/" target="_blank" rel="noopener">[04] SYSTEM 0 / AUGUST 2026 ↗</a><div class="lifecycle"><span>USE</span><i>→</i><span>CARE</span><i>→</i><span>REPAIR</span><i>→</i><span>RECOVER</span></div><p class="eyebrow">MY HYPOTHESIS</p><p>Clear service expectations may shape how customers experience long-term value. I would examine repair journeys before attributing retention to circularity.</p><p class="eyebrow">ALTERNATIVE EXPLANATION</p><p>Repair customers may already be more loyal, and product age or failure severity may explain differences in subsequent purchases.</p></div></div><div class="question"><span>THE INTERNAL QUESTION</span><p>Does the service journey reinforce the value customers expected?</p></div></section>
+<section class="validation paper" id="validation"><p class="eyebrow">04 / HOW I WOULD APPLY THIS</p><h2>Better questions.<br><em>Measurable next steps.</em></h2><p class="section-lede">Three proposed workstreams for product information, ecommerce and customer analytics. No internal results are claimed.</p><div class="experiments"><article><span class="number">01</span><div><h3>Make trade-offs visible</h3><p>Test a use-case comparison module against the current product experience, separately for first-time and returning customers.</p><dl><dt>Primary outcome</dt><dd>Purchase conversion per eligible visitor.</dd><dt>Guardrails</dt><dd>Fit returns, support contacts and margin.</dd><dt>Decision</dt><dd>Keep the module if decision quality improves without worsening post-purchase outcomes.</dd></dl></div></article><article><span class="number">02</span><div><h3>Connect fit to outcomes</h3><p>Join product version, size-guide interaction, exchange and return reasons. Check whether fit friction concentrates in specific families or cohorts.</p><dl><dt>Primary outcome</dt><dd>Fit-related return rate per delivered order.</dd><dt>Controls</dt><dd>Season, region, size availability and customer history.</dd><dt>Decision</dt><dd>Prioritize guidance where the evidence points to an avoidable information gap.</dd></dl></div></article><article><span class="number">03</span><div><h3>Understand the repair journey</h3><p>Map repair eligibility, elapsed time, repeat contacts and subsequent purchasing. Begin with operational diagnosis; test communication improvements next.</p><dl><dt>Primary outcome</dt><dd>Repeat contact rate per repair case.</dd><dt>Guardrails</dt><dd>Resolution time and customer satisfaction.</dd><dt>Decision</dt><dd>Separate service effects from existing loyalty before making retention claims.</dd></dl></div></article></div><details><summary>A practical first 30 days <span>+</span></summary><div class="days"><div><b>01–10 / Align</b><p>Agree on the business question, data access, metric definitions and stakeholders. Audit event coverage and catalog versioning.</p></div><div><b>11–20 / Diagnose</b><p>Build cohort baselines, inspect missing data and validate patterns with ecommerce, product information and service teams.</p></div><div><b>21–30 / Design</b><p>Choose one intervention, predefine success and guardrails, estimate sample requirements and propose an experiment.</p></div></div></details></section>
+<section class="method dark"><p class="eyebrow">05 / RESEARCH DISCIPLINE</p><h2>Evidence first.<br><em>Certainty earned.</em></h2><div class="reasoning"><div><p class="eyebrow">FACT</p><p>Official sources establish reported growth, product terminology and the circular design framework.</p></div><div><p class="eyebrow">INTERPRETATION</p><p>The connections between those facts are my analysis. They point to opportunities worth investigating.</p></div><div><p class="eyebrow">VALIDATION</p><p>Internal data and controlled tests would determine whether those opportunities create value.</p></div></div><p class="method-limit">Scope: a focused public-source study, reviewed October 7, 2026. It does not estimate customer confusion, quantify service problems or claim access to internal data. Unverified price comparisons and unsourced customer quotations have been excluded.</p></section>
+<section class="sources paper" id="sources"><p class="eyebrow">06 / SOURCE REGISTER</p><h2>Follow<br><em>the evidence.</em></h2><div class="source-list"><a href="https://www.amersports.com/newsroom/ceo-letter-to-shareholders-2025/" target="_blank" rel="noopener"><span>01 / STRATEGY</span><div>Amer Sports — CEO letter 2025<small>Published March 25, 2026 / Growth, channels and retail footprint</small></div><b>↗</b></a><a href="https://outlet.arcteryx.com/ca/en/help/arc-naming" target="_blank" rel="noopener"><span>02 / ARCHITECTURE</span><div>Arc’teryx — Naming scheme<small>Product families and modifier definitions</small></div><b>↗</b></a><a href="https://arcteryx.com/us/en/product-advice/arcteryx-jacket-names" target="_blank" rel="noopener"><span>03 / EDUCATION</span><div>Arc’teryx — Jacket names & letter codes<small>Published May 8, 2026 / Existing customer guidance</small></div><b>↗</b></a><a href="https://blog.arcteryx.com/news/arcteryx-introduces-system-0-a-new-framework-for-the-future-of-product-design-and-circularity/" target="_blank" rel="noopener"><span>04 / CIRCULARITY</span><div>Arc’teryx — System 0 launch<small>Published August 26, 2026 / Design, repair and recovery</small></div><b>↗</b></a><a href="https://arcteryx.com/ca/en/explore/system0/process/repairability" target="_blank" rel="noopener"><span>05 / DESIGN</span><div>Arc’teryx — Prioritize repairability<small>Testing wear points to support future repair</small></div><b>↗</b></a></div><p class="small-note">Photography: Arc’teryx official homepage and System 0 press release. Images belong to their respective rights holders and illustrate this independent study. Visual composition inspired by La Dolfina Jumping.</p></section>
+<footer id="contact"><p class="eyebrow">07 / THE PERSON BEHIND THE STUDY</p><h2>I’m Felipe.<br><em>I connect the dots.</em></h2><div class="footer-bottom"><p>My background spans data, ecommerce, product information and operational analysis. This is how I approach a business: understand the system, challenge the first explanation, and turn a signal into a question we can test.</p><div class="contact-links"><a href="mailto:felipervm22@gmail.com">LET’S TALK ↗</a><a href="https://www.linkedin.com/in/felipervm" target="_blank" rel="noopener">LINKEDIN ↗</a><a href="https://github.com/felipervm/arcteryx-product-architecture" target="_blank" rel="noopener">VIEW THE PROJECT ↗</a></div></div><div class="colophon"><span>FELIPE MATTOS / 2026</span><span>INDEPENDENT PORTFOLIO STUDY. NOT AFFILIATED WITH ARC’TERYX.</span><a href="#top">BACK TO TOP ↑</a></div></footer></main><script src="script.js"></script></body></html>
